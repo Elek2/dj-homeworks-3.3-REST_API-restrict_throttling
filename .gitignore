@@ -289,4 +289,13 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/python,django,windows
+.idea
+# End of https://www.toptal.com/developers/gitignore/api/python,django,windows!/.idea/.gitignore
+
+!/.idea/api_with_restrictions.iml
+
+!/.idea/misc.xml
+
+!/.idea/modules.xml
+
+!/.idea/vcs.xml
