@@ -17,11 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
-
+from django.views.generic import RedirectView
 from advert.views import AdvertisementViewSet, index
 
 router = DefaultRouter()
-router.register('', AdvertisementViewSet)
+router.register('advertisements', AdvertisementViewSet)
 # TODO: подключите `AdvertisementViewSet`
 
 
@@ -30,3 +30,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
+
+  # Переназначение начального пути через класс
+                

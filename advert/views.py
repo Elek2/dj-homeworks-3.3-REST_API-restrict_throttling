@@ -10,14 +10,13 @@ from rest_framework.viewsets import ModelViewSet
 
 from advert.filters import AdvertisementFilter
 from advert.models import Advertisement, Favorites
-# from rest_framework.permissions import IsAuthenticated
-from advert.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
+from advert.permissions import IsObjectAuthenticated
 from advert.serializers import AdvertisementSerializer, FavoritesSerializer
 
 
-
 def index(request):
-    return redirect('api/')
+    return redirect('api/advertisements/')
 
 
 class AdvertisementViewSet(ModelViewSet):
@@ -34,16 +33,19 @@ class AdvertisementViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
 
         current_user = request.user.id  # id пользователя, напр. 1
-        other_users = [i['id'] for i in User.objects.exclude(id=current_user).values('id')]
-        # id остальных пользователей, напр. [2,3]
+        # other_users = [i['id'] for i in User.objects.exclude(id=current_user).values('id')]
+        other_users = User.objects.exclude(id=current_user).values_list('id', flat=True)
+        # id остальных пользователей, напр. (2,3)
         queryset = Advertisement.objects.exclude(creator__in=other_users, draft=True)
         serializer = AdvertisementSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def get_permissions(self):
         """Получение прав для действий."""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
+        if self.action in ["create"]:
             return [IsAuthenticated()]
+        elif self.action in ["update", "partial_update", "destroy"]:
+            return [IsObjectAuthenticated()]
         return []
 
 # Доп задание - избранные объявления
@@ -67,7 +69,8 @@ class AdvertisementViewSet(ModelViewSet):
     @action(detail=False, methods=['get'])  # detail=False - действия для отдельных объектов
     def f(self, request):
         """Избранное."""
-        favors = Favorites.objects.all()
+        current_user = request.user.id
+        favors = Favorites.objects.filter(user=current_user)
         serializer = FavoritesSerializer(favors, many=True)
 
         return Response(serializer.data)

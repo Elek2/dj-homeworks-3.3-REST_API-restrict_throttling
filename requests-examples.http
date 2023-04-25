@@ -1,17 +1,18 @@
 # примеры API-запросов
 
-@baseUrl = https://localhost:8000/api
+@baseUrl = http://localhost:8000/api
 
 # получение объявлений
 GET {{baseUrl}}/advertisements/
 Content-Type: application/json
+
 
 ###
 
 # создание объявления
 POST {{baseUrl}}/advertisements/
 Content-Type: application/json
-Authorization: Token 902ef055a9ac93f18327f1f9c45ab059f1a62c7d
+Authorization: Token 87c20106082b034faf8cd28eb17fcdc2412a0e88
 
 {
   "title": "Шкаф IKEA",
@@ -21,12 +22,12 @@ Authorization: Token 902ef055a9ac93f18327f1f9c45ab059f1a62c7d
 ###
 
 # попытка поменять объявление
-PATCH {{baseUrl}}/advertisements/1/
+PATCH {{baseUrl}}/advertisements/23/
 Content-Type: application/json
-Authorization: Token 902ef055a9ac93f18327f1f9c45ab059f1a62c7d
+Authorization: Token 87c20106082b034faf8cd28eb17fcdc2412a0e88
 
 {
-  "status": "CLOSED"
+  "status": "OPEN"
 }
 
 ###
@@ -40,3 +41,10 @@ Content-Type: application/json
 # фильтрация по дате
 GET {{baseUrl}}/advertisements/?created_at_before=2020-10-01
 Content-Type: application/json
+
+###
+
+# избранные объявления
+GET {{baseUrl}}/advertisements/f/
+Content-Type: application/json
+Authorization: Token e7859ac478ebdd4ab77e2771b8d227c548aeb79b
